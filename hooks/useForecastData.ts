@@ -62,7 +62,15 @@ export function useForecastData() {
   }, [leadTimeHours]);
 
   useEffect(() => {
-    loadData();
+    let isMounted = true;
+    const execute = async () => {
+      if (!isMounted) return;
+      await loadData();
+    };
+    execute();
+    return () => {
+      isMounted = false;
+    };
   }, [loadData]);
 
   return {
